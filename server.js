@@ -3,6 +3,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
+const authRoutes = require("./routes/auth");
+const pdfRoutes = require("./routes/pdf");
+
 dotenv.config();
 
 const app  = express();
@@ -20,6 +23,12 @@ connectDB();
 app.get("/", (req, res) => {
     res.send("NotesMint API Running ");
 });
+
+// User registration and Login :-
+app.use("/api/auth", authRoutes);
+
+// PDF buying route 
+app.use("/api/pdfs", pdfRoutes);
 
 const PORT = process.env.PORT || 5000;
 
