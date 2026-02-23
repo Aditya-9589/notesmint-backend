@@ -1,12 +1,18 @@
+
+
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
+
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/auth");
-const pdfRoutes = require("./routes/pdf");
+// const pdfRoutes = require("./routes/pdf");
 
-dotenv.config();
+const bundleRoutes = require("./routes/bundle");
+
 
 const app  = express();
 
@@ -27,8 +33,10 @@ app.get("/", (req, res) => {
 // User registration and Login :-
 app.use("/api/auth", authRoutes);
 
-// PDF buying route 
-app.use("/api/pdfs", pdfRoutes);
+// pdf uploading
+// app.use("/api/pdfs", pdfRoutes);
+app.use("/api/bundles", bundleRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 

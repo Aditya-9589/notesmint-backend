@@ -21,10 +21,10 @@ const userSchema = new mongoose.Schema(
             enum: ["user", "admin"],
             default: "user",
         },
-        purchasedPDFs: [
+        purchasedBundles: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "PDF",
+                ref: "Bundle",
             },
         ],
     },
