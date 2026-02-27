@@ -13,8 +13,8 @@
 
 const cloudinary = require("cloudinary").v2;
 
-console.log("Cloud:", process.env.CLOUDINARY_CLOUD_NAME);
-console.log("Key:", process.env.CLOUDINARY_API_KEY);
+// console.log("Cloud:", process.env.CLOUDINARY_CLOUD_NAME);
+// console.log("Key:", process.env.CLOUDINARY_API_KEY);
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
