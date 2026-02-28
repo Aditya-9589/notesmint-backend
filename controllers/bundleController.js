@@ -4,15 +4,22 @@ const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 
 // temp testing 
-        // console.log("BODY: 1", req.body);
-        // console.log("FILES: 1", req.files);
+// console.log("BODY: 1", req.body);
+// console.log("FILES: 1", req.files);
+
+// PUBLIC: Get all bundles
+exports.getBundles = async (req, res) => {
+    const bundles = await Bundle.find();
+    res.json(bundles);
+}
+
 
 // ADMIN: Create Bundle POST
 exports.createBundle = async (req, res) => {
 
     // temp testing 
-        // console.log("BODY: 2", req.body);
-        // console.log("FILES: 2", req.files);
+    // console.log("BODY: 2", req.body);
+    // console.log("FILES: 2", req.files);
 
 
     try {
@@ -57,6 +64,7 @@ exports.createBundle = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // ADMIN: Update Bundle -> PUT 
 exports.updateBundle = async (req, res) => {
@@ -105,13 +113,49 @@ exports.updateBundle = async (req, res) => {
 
         res.json(bundle);
 
-    }   catch (error) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
-// PUBLIC: Get all bundles
-exports.getBundles = async (req, res) => {
-    const bundles = await Bundle.find();
-    res.json(bundles);
+// ADMIN: Update Bundle -> PATCH (partial update)
+exports.patchBundle = async (req, res) => {
+    try {
+        const bundle = await Bundle.findById(req.params.id);
+
+        if(!bundle) {
+            return res.status(404).json({ message: "Bundle not found" });
+        }
+
+        // Update only fields provided
+        Object.keys(req.body).forEach((key) => {
+            bundle[key] = req.body[key];
+        });
+
+        await bundle.save();
+
+        res.json(bundle);
+
+    }   catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
+// ADMIN: Delete Bundle -> DELETE
+exports.deleteBundle = async (req, res) => {
+    try {
+        const bundle = await Bundle.findById(req.params.id);
+
+        if (!bundle) {
+            return res.status(404).json({ message: "Bundle not found" });
+        }
+
+        await bundle.deleteOne();
+
+        res.json({ message: "Bundle deleted successfully" });
+        
+    }   catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
