@@ -25,7 +25,7 @@ router.post(
     adminOnly,
     upload.fields([
         { name: "thumbnail", maxCount: 1 },
-        { name: "pdfs", maCount: 10 },
+        { name: "pdfs", maxCount: 10 },
     ]),
 
     createBundle
