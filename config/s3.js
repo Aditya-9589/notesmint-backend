@@ -3,7 +3,7 @@ const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs");
 
 const s3 = new S3Client({
-    region: ProcessingInstruction.env.AWS_REGION,
+    region: process.env.AWS_REGION,
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY,
         secretAccessKey: process.env.AWS_SECRET_KEY,
@@ -11,6 +11,7 @@ const s3 = new S3Client({
 });
 
 const uploadToS3 = async (file) => {
+    
     const fileContent = fs.readFileSync(file.path);
 
     const key = `notesmint/pdfs/${Date.now()}-${file.originalname}`;

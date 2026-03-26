@@ -1,6 +1,7 @@
 
 const Bundle = require("../models/Bundle");
 const cloudinary = require("../config/cloudinary");
+const uploadToS3 = require("../config/s3");
 const fs = require("fs");
 
 // temp testing 
@@ -32,20 +33,37 @@ exports.createBundle = async (req, res) => {
         );
 
         // Upload PDFs 
+        // const uploadedPDFs = [];
+        // for (let file of req.files.pdfs) {
+        //     const result = await cloudinary.uploader.upload(file.path, {
+        //         folder: "notesmint/pdfs",
+        //         resource_type: "auto",
+        //     });
+
+        //     uploadedPDFs.push({
+        //         title: file.originalname,
+        //         pdfUrl: result.secure_url,
+        //     });
+
+        //     fs.unlinkSync(file.path);   // delete temp
+        // }
+
+
+        // Upload PDFs to S3 :-
         const uploadedPDFs = [];
 
         for (let file of req.files.pdfs) {
-            const result = await cloudinary.uploader.upload(file.path, {
-                folder: "notesmint/pdfs",
-                resource_type: "auto",
-            });
+            
+            const { fileUrl, key } = await uploadToS3(file);
 
             uploadedPDFs.push({
                 title: file.originalname,
-                pdfUrl: result.secure_url,
-            });
+                pdfUrl: fileUrl,
+                pdfKey: key,
+            })
 
             fs.unlinkSync(file.path);   // delete temp
+
         }
 
         fs.unlinkSync(req.files.thumbnail[0].path);
@@ -93,16 +111,30 @@ exports.updateBundle = async (req, res) => {
         }
 
         // Add new PDFs if uploaded
+        // if (req.files?.pdfs) {
+        //     for (let file of req.files.pdfs) {
+        //         const result = await cloudinary.uploader.upload(file.path, {
+        //             folder: "notesmint/pdfs",
+        //             resource_type: "auto",
+        //         });
+
+        //         bundle.pdfs.push({
+        //             title: file.originalname,
+        //             pdfUrl: result.secure_url,
+        //         });
+
+        //         fs.unlinkSync(file.path);
+        //     }
+        // }
+
         if (req.files?.pdfs) {
             for (let file of req.files.pdfs) {
-                const result = await cloudinary.uploader.upload(file.path, {
-                    folder: "notesmint/pdfs",
-                    resource_type: "auto",
-                });
+                const { fileUrl, key } = await uploadToS3(file);
 
                 bundle.pdfs.push({
                     title: file.originalname,
-                    pdfUrl: result.secure_url,
+                    pdfUrl: fileUrl,
+                    pdfKey: key,
                 });
 
                 fs.unlinkSync(file.path);
