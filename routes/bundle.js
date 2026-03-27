@@ -9,6 +9,7 @@ const {
     updateBundle,
     patchBundle,
     deleteBundle,
+    downloadPdf
 } = require("../controllers/bundleController");
 
 
@@ -18,6 +19,14 @@ const {
 // });
 
 router.get("/", getBundles);
+
+// Download Route :-
+router.get(
+    "/:bundleId/pdf/:pdfId/download",
+    protect,
+    downloadPdf
+);
+
 
 router.post(
     "/",
@@ -31,6 +40,7 @@ router.post(
     createBundle
 );
 
+
 router.put(
     "/:id",
     protect,
@@ -42,8 +52,11 @@ router.put(
     updateBundle
 );
 
+
 router.patch("/:id", protect, adminOnly, patchBundle);
 
+
 router.delete("/:id", protect, adminOnly, deleteBundle);
+
 
 module.exports = router;

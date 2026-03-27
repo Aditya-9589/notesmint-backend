@@ -3,6 +3,8 @@ const Bundle = require("../models/Bundle");
 const cloudinary = require("../config/cloudinary");
 const uploadToS3 = require("../config/s3");
 const fs = require("fs");
+const generateSignedUrl = require("../utils/s3SignedUrl")
+
 
 // temp testing 
 // console.log("BODY: 1", req.body);
@@ -53,7 +55,7 @@ exports.createBundle = async (req, res) => {
         const uploadedPDFs = [];
 
         for (let file of req.files.pdfs) {
-            
+
             const { fileUrl, key } = await uploadToS3(file);
 
             uploadedPDFs.push({
@@ -155,7 +157,7 @@ exports.patchBundle = async (req, res) => {
     try {
         const bundle = await Bundle.findById(req.params.id);
 
-        if(!bundle) {
+        if (!bundle) {
             return res.status(404).json({ message: "Bundle not found" });
         }
 
@@ -168,7 +170,7 @@ exports.patchBundle = async (req, res) => {
 
         res.json(bundle);
 
-    }   catch (error) {
+    } catch (error) {
         res.status(500).json({ message: error.message })
     }
 }
@@ -186,8 +188,64 @@ exports.deleteBundle = async (req, res) => {
         await bundle.deleteOne();
 
         res.json({ message: "Bundle deleted successfully" });
-        
-    }   catch (error) {
+
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
+
+
+// Download Controller :-
+// My code - not working :-
+exports.downloadPdf = async (req, res) => {
+    try {
+
+        const { bundleId, pdfId } = req.params;
+
+        const bundle = await Bundle.findById(bundleId);
+
+        if (!bundle) {
+            return res.status(404).json({ message: "Bundle not found" });
+        }
+
+        const pdf = bundle.pdfs.id(pdfId);
+
+        if (!pdf) {
+            return res.status(404).json({ message: "PDF not found" });
+        }
+
+        const url = await generateSignedUrl(pdf.pdfKey);
+
+        res.json({ downloadUrl: url });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Asgar bhai code - working :-
+// exports.downloadPdf = async (req, res) => {
+//     try {
+
+//         const { bundleId, pdfId } = req.params;
+
+//         const bundle = await Bundle.findById(bundleId);
+
+//         if (!bundle) {
+//             return res.status(404).json({ message: "Bundle not found" });
+//         }
+
+//         const pdf = bundle.pdfs.map((obj) => obj.pdfUrl)
+
+//         if (!pdf) {
+//             return res.status(404).json({ message: "PDF not found" });
+//         }
+
+//         // const url = await generateSignedUrl(pdf.pdfKey);
+
+//         res.json({ pdf });
+
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
