@@ -37,6 +37,11 @@ app.use("/api/auth", authRoutes);
 // app.use("/api/pdfs", pdfRoutes);
 app.use("/api/bundles", bundleRoutes);
 
+// Razorpay Payment :-
+const paymentRoutes = require("./routes/paymentRoutes");
+
+app.use("/api/payment", paymentRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 

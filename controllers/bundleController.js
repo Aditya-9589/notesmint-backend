@@ -214,6 +214,12 @@ exports.downloadPdf = async (req, res) => {
             return res.status(404).json({ message: "PDF not found" });
         }
 
+        if(!req.user.purchasedBundles.includes(bundleId)) {
+            return res.status(403).json({
+                message: "You need to purchase this bundle"
+            });
+        }
+
         const url = await generateSignedUrl(pdf.pdfKey);
 
         res.json({ downloadUrl: url });
