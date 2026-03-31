@@ -16,7 +16,7 @@
 const multer = require("multer");
 const path = require("path");
 
-console.log("Upload middleware loaded");
+// console.log("Upload middleware loaded");
 
 const storage  = multer.diskStorage({
 

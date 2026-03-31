@@ -13,6 +13,8 @@ const protect = async (req, res, next) => {
         ) {
             // Textract token from header 
             token = req.headers.authorization.split(" ")[1];
+            // Debugging :- 
+            // console.log("TOKEN", token);
 
             // verify token 
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -28,7 +30,7 @@ const protect = async (req, res, next) => {
 
             // next();
 
-            re.user = user;
+            req.user = user;
             return next();
 
         }
@@ -39,7 +41,7 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ message: "Not authorized, no token" });
 
     }   catch (error) {
-        res.status(401).json({ message: "Not authorized, token failed" });
+        return res.status(401).json({ message: "Not authorized, token failed" });
     }
 };
 

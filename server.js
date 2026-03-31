@@ -7,17 +7,24 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
-
 const authRoutes = require("./routes/auth");
 // const pdfRoutes = require("./routes/pdf");
-
 const bundleRoutes = require("./routes/bundle");
+const webhookRoutes = require("./routes/webhookRoutes");
 
 
 const app  = express();
 
 // middleware 
 app.use(cors());
+
+// RAW BODY REQUIRED FOR WEBHOOK 
+app.use(
+    "/api/webhook",
+    express.raw({ type: "application/json" })
+);
+
+app.use("/api/webhook", webhookRoutes);
 app.use(express.json());
 
 
@@ -36,6 +43,7 @@ app.use("/api/auth", authRoutes);
 // pdf uploading
 // app.use("/api/pdfs", pdfRoutes);
 app.use("/api/bundles", bundleRoutes);
+
 
 // Razorpay Payment :-
 const paymentRoutes = require("./routes/paymentRoutes");

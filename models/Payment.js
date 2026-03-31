@@ -1,0 +1,35 @@
+
+const mongoose = require("mongoose");
+
+const paymentSchema = new mongoose.Schema(
+    {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        bundleId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Bundle",
+            required: true,
+        },
+        orderId: {
+            type: String,
+            required: true,
+        },
+        paymentId: {
+            type: String,
+        },
+        amount: {
+            type: Number,
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["created", "success", "failed"],
+            default: "created",
+        },
+    },
+    { timestamps: true }
+);
+
