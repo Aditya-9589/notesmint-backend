@@ -34,7 +34,8 @@ exports.createOrder = async (req, res) => {
             receipt: `order_${Date.now()}`,
         }
 
-        // const order = await razorpay.orders.create(options);
+        // CREATE ORDER 
+        const order = await razorpay.orders.create(options);
 
         // STORE PAYMENT 
         await Payment.create({
@@ -111,7 +112,7 @@ exports.verifyPayment = async (req, res) => {
 
         // Step 2 : Find Payment in DB 
         const payment = await Payment.findOne({
-            orderid: razorpay_order_id,
+            orderId: razorpay_order_id,
         });
 
         if (!payment) {
