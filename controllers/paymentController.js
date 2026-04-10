@@ -9,6 +9,9 @@ const Payment = require("../models/Payment");
 exports.createOrder = async (req, res) => {
 
     try {
+
+        // -----------------------------------------------------------------------------------------
+
         // const { bundleId, amount } = req.body;
 
         // const options = {
@@ -18,7 +21,18 @@ exports.createOrder = async (req, res) => {
         //     receipt: `receipt_${Date.now()}`
         // };
 
+        // --------------------------------------------------------------------------------------------
+
+
+
+
         const { bundleId } = req.body;
+        // ----     Razorpay error debugging     -------
+        console.log("BODY: ", req.body);
+
+
+
+
 
         // Fetch bundle from DB :-
         const bundle = await Bundle.findById(bundleId);
@@ -124,10 +138,25 @@ exports.verifyPayment = async (req, res) => {
         payment.status = "success";
         await payment.save();
 
+
+
+
         // Step 4: Grant Access (IDEMPOTENT) 
         const user = await User.findById(req.user.id);
+        // -----    User body debugging     ----
+        console.log("USER: ", req.user);
 
-        if (!user.purchasedBundles.includes(bundleId)) {
+
+
+
+        // if (!user.purchasedBundles.includes(bundleId)) {
+        //     user.purchasedBundles.push(bundleId);
+        //     await user.save();
+        // }
+
+        if (!user.purchasedBundles.some(
+            (id) => id.toString() === bundleId
+        )) {
             user.purchasedBundles.push(bundleId);
             await user.save();
         }

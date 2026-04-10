@@ -5,6 +5,7 @@ const upload = require("../middleware/uploadMiddleware");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const {
     getBundles,
+    getBundleById,
     createBundle,
     updateBundle,
     patchBundle,
@@ -18,7 +19,11 @@ const {
 //     res.send("Bundle route working");
 // });
 
+// get all bundles :-
 router.get("/", getBundles);
+
+// get specific bundle by ID :-
+router.get("/:id", getBundleById);
 
 // Download Route :-
 router.get(

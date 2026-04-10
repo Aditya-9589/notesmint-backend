@@ -61,9 +61,17 @@ app.get("/", (req, res) => {
 // User registration and Login :-
 app.use("/api/auth", authRoutes);
 
+
+
+app.use("/api/auth", require("./routes/auth"));
+
+
+
+
 // pdf uploading
 // app.use("/api/pdfs", pdfRoutes);
 app.use("/api/bundles", bundleRoutes);
+// app.use("/api/bundle", bundleRoutes);
 
 
 // Razorpay Payment :-

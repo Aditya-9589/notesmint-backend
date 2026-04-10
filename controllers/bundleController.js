@@ -16,6 +16,21 @@ exports.getBundles = async (req, res) => {
     res.json(bundles);
 }
 
+// Public: get specific bundle by Id, and pay for items, open razorpay 
+exports.getBundleById = async (req, res) => {
+    try {
+        const bundle = await Bundle.findById(req.params.id);
+        
+        if (!bundle) {
+            return res.status(404).json({ message: "Bundle not found" });
+        }
+
+        res.json(bundle);
+    }   catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 // ADMIN: Create Bundle POST
 exports.createBundle = async (req, res) => {

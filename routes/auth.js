@@ -10,7 +10,11 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 router.get("/me", protect, async (req, res) => {
-    res.json(req.user);
-})
+    // res.json(req.user);
+    res.json({
+        success: true,
+        user: req.user,
+    });
+});
 
 module.exports = router;
