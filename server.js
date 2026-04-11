@@ -10,7 +10,9 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
 // const pdfRoutes = require("./routes/pdf");
 const bundleRoutes = require("./routes/bundle");
+const paymentRoutes = require("./routes/paymentRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 
 const app = express();
@@ -60,12 +62,7 @@ app.get("/", (req, res) => {
 
 // User registration and Login :-
 app.use("/api/auth", authRoutes);
-
-
-
-app.use("/api/auth", require("./routes/auth"));
-
-
+// app.use("/api/auth", require("./routes/auth"));
 
 
 // pdf uploading
@@ -75,9 +72,18 @@ app.use("/api/bundles", bundleRoutes);
 
 
 // Razorpay Payment :-
-const paymentRoutes = require("./routes/paymentRoutes");
-
 app.use("/api/payment", paymentRoutes);
+
+// My purchases routes 
+app.use("/api/user", userRoutes); 
+
+
+// global error handler 
+app.use((err, req, res, next) => {
+    res.status(500).json({
+        message: err.message || "Server Error",
+    });
+});
 
 
 const PORT = process.env.PORT || 5000;
