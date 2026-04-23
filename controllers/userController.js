@@ -1,6 +1,6 @@
 
 const User = require("../models/User");
-const user = require("../models/User");
+// const user = require("../models/User");
 
 exports.getMyPurchases = async (req, res) => {
     try {
@@ -16,6 +16,6 @@ exports.getMyPurchases = async (req, res) => {
         console.log("MY PURCHASES ERROR: ", error);
         res.status(500).json({
             message: "Server Error",
-        })
+        });
     }
-}
+};

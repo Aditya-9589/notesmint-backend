@@ -229,9 +229,19 @@ exports.downloadPdf = async (req, res) => {
             return res.status(404).json({ message: "PDF not found" });
         }
 
-        if(!req.user.purchasedBundles.includes(bundleId)) {
+        // if(!req.user.purchasedBundles.includes(bundleId)) {
+        //     return res.status(403).json({
+        //         message: "You need to purchase this bundle"
+        //     });
+        // }
+
+        if (
+            !req.user.purchasedBundles.some(
+                id => id.toString() === bundleId
+            )
+        ) {
             return res.status(403).json({
-                message: "You need to purchase this bundle"
+                message: "You need to purchae this bundle"
             });
         }
 
